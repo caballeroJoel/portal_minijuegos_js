@@ -44,12 +44,69 @@ window.addEventListener("click", function(e) {
 })
 
 function guessTheNumber() {
-    let html = '';
+    let html = `
+        <div class="guess_the_number">
+            <h2>Adivina el numero</h2>
+            <div class="game">
+                <div class="hist_nums">
+                    <div class="col_hnums" id="attempts">
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                    </div>
+                </div>
+                <div class="interact_nums">
+                    <p class="msg_num" id="msgNum">Adivina el numero</p>
+                    <input type="number" name="guessNum" id="guessNum">
+                </div>
+            </div>
+        </div>
+    `;
+    gameWin.innerHTML = html;
 
     let randNum = Math.trunc((Math.random()*100)+1);
+    console.log(randNum);
+    let intentos = 0;
 
-    
+    const attempts = document.querySelectorAll("#attempts p");
+    const guessNum = document.querySelector("#guessNum");
+    const msgNum = document.querySelector("#msgNum");
+    guessNum.addEventListener("change", relNum);
 
-    gameWin.innerHTML = html;
+
+    function relNum() {
+        numPlay = guessNum.value;
+        if(numPlay > 99 || numPlay < 1) {
+            msgNum.textContent = "El numero debe estar entre 1 y 100";
+            exit;
+        }
+        
+        attempts[intentos].textContent = numPlay;
+        intentos++;
+        
+        if(randNum > numPlay) {
+            msgNum.textContent = "El numero es mayor";
+            guessNum.value = "";    
+        } else if(randNum < numPlay) {
+            msgNum.textContent = "El numero es menor";
+            guessNum.value = "";    
+        } else if(randNum == numPlay) {
+            msgNum.textContent = "!! HAS ACERTADO !!";
+            guessNum.disabled = true;   
+        }
+        
+        if(intentos==10 && randNum != numPlay) {
+            msgNum.textContent = `Has perdido, el numero era ${randNum}`;
+            guessNum.disabled = true;
+        }
+
+    }
 
 }
