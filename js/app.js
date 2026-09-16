@@ -5,6 +5,8 @@ const game3B = document.querySelector("#game3");
 const disGame = document.querySelector("#displayGame");
 const gameWin = document.querySelector("#gameWindows");
 
+let last5 = [];
+
 game1B.addEventListener("click", (e) => {
     e.stopPropagation();
     applyGame(1);
@@ -43,10 +45,41 @@ window.addEventListener("click", function(e) {
     }
 })
 
+function newFirst(array, nuevoNumero) {
+    array.unshift(nuevoNumero);
+    
+    if (array.length > 5) {
+        array.pop();
+    }
+    
+    return array;
+}
+
 function guessTheNumber() {
+    console.log(last5);
+    let tabla = "", h="";
+
+    for(let i=0; i<5; i++) {
+        h+=`<td>${last5[i]??""}</td>`;
+    }
+
+    tabla = `
+        <table>
+            <tr>
+                ${h}
+            </tr>
+        </table>
+    `;
+
     let html = `
         <div class="guess_the_number">
-            <h2>Adivina el numero</h2>
+            <div class="title_history">
+                <h2>Adivina el numero</h2>
+                <div class="last5">
+                    <p>Últimas 5 partidas</p>
+                    ${tabla}
+                </div>
+            </div>
             <div class="game">
                 <div class="hist_nums">
                     <div class="col_hnums" id="attempts">
@@ -100,13 +133,19 @@ function guessTheNumber() {
         } else if(randNum == numPlay) {
             msgNum.textContent = "!! HAS ACERTADO !!";
             guessNum.disabled = true;   
+            newFirst(last5, intentos+" int.");
         }
         
         if(intentos==10 && randNum != numPlay) {
             msgNum.textContent = `Has perdido, el numero era ${randNum}`;
             guessNum.disabled = true;
+            newFirst(last5, "Lost");
         }
 
     }
+
+}
+
+function pacman() {
 
 }
