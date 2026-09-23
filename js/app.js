@@ -148,4 +148,166 @@ function guessTheNumber() {
 
 function pacman() {
 
+    let html='', startHtml='';
+
+    startHtml = `
+        <div class="pacman_game">
+            <div class="main_game">
+                <div class="start_pacman">
+                    <h2>Pacman</h2>
+                    <img src="./img/img_game_2.png" alt="Pacman">
+                    <button id="startPacman">Iniciar</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    html = `
+        <div class="pacman_game">
+            <div class="main_game">
+                <div class="mapa">
+                    <table id="mapaLog" class="mapa-log"></table>
+                </div>
+            </div>
+        </div>
+    `;
+
+    gameWin.innerHTML = startHtml;
+
+    const startPacmanButton = document
+        .querySelector("#startPacman")
+        .addEventListener("click", function(e) {
+
+            gameWin.innerHTML = html;
+        
+            const mapaLog = document.querySelector("#mapaLog");
+        
+            const mapa = [
+                [{estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"pacman"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}]
+            ];
+        
+            let pacmanObj = {
+                fila: 1,
+                columna: 1,
+                direccion: "right"
+            };
+        
+        
+        
+            function getRotacion() {
+                switch (pacmanObj.direccion) {
+                    case "up":
+                        return -90;
+                    case "down":
+                        return 90;
+                    case "left":
+                        return 180;
+                    case "right":
+                        return 0;
+                }
+            }
+        
+        
+            function renderMap() {
+                mapaLog.innerHTML = "";
+                for(let fila in mapa) {
+                    mapaLog.innerHTML += `<tr>`;
+                    
+                    let html='';
+                    for(let j=0; j<mapa[fila].length; j++) {
+                        if(mapa[fila][j].estado === "pacman") {
+                            html += `
+                                <td class="${mapa[fila][j].estado}">
+                                    <div class="pacman-player" style="transform: rotate(${getRotacion()}deg)"></div>
+                                </td>
+                            `;
+                        } else {
+                            html += `<td class="${mapa[fila][j].estado}"></td>`;
+                        }
+                    }
+                    mapaLog.innerHTML += html;
+                    mapaLog.innerHTML += `</tr>`;
+                }
+            }
+        
+            document.addEventListener("keydown", function(e) {
+                if(e.key === "ArrowUp" || e.key === "w") {
+                    pacmanObj.direccion = "up";
+                    const nuevaFila = pacmanObj.fila - 1;
+                    
+                    if (mapa[nuevaFila][pacmanObj.columna].estado !== "pared") {
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+        
+                        pacmanObj.fila = nuevaFila;
+        
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+        
+                        renderMap();
+                    }
+                }
+                if(e.key === "ArrowDown" || e.key === "s") {
+                    pacmanObj.direccion = "down";
+                    const nuevaFila = pacmanObj.fila + 1;
+                    
+                    if (mapa[nuevaFila][pacmanObj.columna].estado !== "pared") {
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+        
+                        pacmanObj.fila = nuevaFila;
+        
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+        
+                        renderMap();
+                    }
+                }
+                if(e.key === "ArrowLeft" || e.key === "a") {
+                    pacmanObj.direccion = "left";
+                    const nuevaColumna = pacmanObj.columna - 1;
+                    
+                    if (mapa[pacmanObj.fila][nuevaColumna].estado !== "pared") {
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+        
+                        pacmanObj.columna = nuevaColumna;
+        
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+        
+                        renderMap();
+                    }
+                }
+                if(e.key === "ArrowRight" || e.key === "d") {
+                    pacmanObj.direccion = "right";
+                    const nuevaColumna = pacmanObj.columna + 1;
+                    
+                    if (mapa[pacmanObj.fila][nuevaColumna].estado !== "pared") {
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+        
+                        pacmanObj.columna = nuevaColumna;
+        
+                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+        
+                        renderMap();
+                    }
+                }
+        
+            });
+        
+            renderMap();
+        });
+
 }
