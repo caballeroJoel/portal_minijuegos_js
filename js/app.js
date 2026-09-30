@@ -42,6 +42,7 @@ window.addEventListener("click", function(e) {
     if(e.target.classList.contains("display_game")) {
         disGame.classList.add("hidden");
         gameWin.innerHTML = "";
+        this.clearInterval();
     }
 })
 
@@ -166,6 +167,13 @@ function pacman() {
         <div class="pacman_game">
             <div class="main_game">
                 <div class="mapa">
+                    <div class="tit">
+                        <h2 id="currentLevel">Nivel 1</h2>
+                        <div>
+                            <p id="tiempoContador">0 segs</p>
+                            <p id="contadorKills">Hola</p>
+                        </div>
+                        </div>
                     <table id="mapaLog" class="mapa-log"></table>
                 </div>
             </div>
@@ -181,15 +189,16 @@ function pacman() {
             gameWin.innerHTML = html;
         
             const mapaLog = document.querySelector("#mapaLog");
+            const currentLevel = document.querySelector("#currentLevel");
         
             const mapa = [
                 [{estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}],
-                [{estado:"pared"}, {estado:"pacman"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
-                [{estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}],
+                [{estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pacman"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"libre"}, {estado:"pared"}, {estado:"pared"}, {estado:"pared"}],
                 [{estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"libre"}, {estado:"pared"}],
@@ -204,8 +213,8 @@ function pacman() {
             ];
         
             let pacmanObj = {
-                fila: 1,
-                columna: 1,
+                fila: 6,
+                columna: 8,
                 direccion: "right"
             };
         
@@ -223,10 +232,57 @@ function pacman() {
                         return 0;
                 }
             }
-        
+
+            function startGame() {
+                for(let i=0; i<5; i++) {
+                    let x = Math.trunc((Math.random()*17));
+                    let y = Math.trunc((Math.random()*17));
+    
+                    
+                    if(mapa[x][y].estado != "libre") {
+                        i--;                    
+                    } else {
+                        mapa[x][y].estado="ghost";
+                    }
+                }
+            }
+            
+            startGame();
+
+            let nivel=1;
+            let tiempo=0;
+            let kills=0;
+            let difi=500;
+
+            let tiempoContador = document.querySelector("#tiempoContador");
+            let contadorKills = document.querySelector("#contadorKills");
+
+            let intervalo = setInterval(function() {
+                tiempo++;
+                tiempoContador.innerHTML = `${tiempo} segs`;
+            },1000);
         
             function renderMap() {
                 mapaLog.innerHTML = "";
+
+                let fingame=true;
+
+                mapa.forEach(row => {
+                    row.forEach(cel => {
+                        if(cel.estado=="ghost") {
+                            fingame=false;
+                        }
+                    });
+                });
+
+                if(fingame==true) {
+                    startGame();
+                    nivel++;
+                    int.clearInterval();
+                    difi = 50;
+                    currentLevel.innerHTML = `Nivel ${nivel}`;
+                }
+
                 for(let fila in mapa) {
                     mapaLog.innerHTML += `<tr>`;
                     
@@ -250,62 +306,89 @@ function pacman() {
             document.addEventListener("keydown", function(e) {
                 if(e.key === "ArrowUp" || e.key === "w") {
                     pacmanObj.direccion = "up";
-                    const nuevaFila = pacmanObj.fila - 1;
-                    
-                    if (mapa[nuevaFila][pacmanObj.columna].estado !== "pared") {
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
-        
-                        pacmanObj.fila = nuevaFila;
-        
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
-        
-                        renderMap();
-                    }
                 }
                 if(e.key === "ArrowDown" || e.key === "s") {
                     pacmanObj.direccion = "down";
-                    const nuevaFila = pacmanObj.fila + 1;
-                    
-                    if (mapa[nuevaFila][pacmanObj.columna].estado !== "pared") {
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
-        
-                        pacmanObj.fila = nuevaFila;
-        
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
-        
-                        renderMap();
-                    }
                 }
                 if(e.key === "ArrowLeft" || e.key === "a") {
                     pacmanObj.direccion = "left";
-                    const nuevaColumna = pacmanObj.columna - 1;
-                    
-                    if (mapa[pacmanObj.fila][nuevaColumna].estado !== "pared") {
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
-        
-                        pacmanObj.columna = nuevaColumna;
-        
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
-        
-                        renderMap();
-                    }
                 }
                 if(e.key === "ArrowRight" || e.key === "d") {
                     pacmanObj.direccion = "right";
-                    const nuevaColumna = pacmanObj.columna + 1;
-                    
-                    if (mapa[pacmanObj.fila][nuevaColumna].estado !== "pared") {
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
-        
-                        pacmanObj.columna = nuevaColumna;
-        
-                        mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
-        
-                        renderMap();
-                    }
                 }
-        
             });
+
+            let int = setInterval(function() {
+                let nuevaColumna;
+                let nuevaFila;
+
+                switch(pacmanObj.direccion) {
+                    case "right":
+                        nuevaColumna = pacmanObj.columna + 1;
+                
+                        if (mapa[pacmanObj.fila][nuevaColumna].estado !== "pared") {
+                            if(mapa[pacmanObj.fila][nuevaColumna].estado=="ghost") {
+                                kills++;
+                                contadorKills.innerHTML=`${kills} kills`;
+                            }
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+            
+                            pacmanObj.columna = nuevaColumna;
+            
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+                        }
+                    break;
+                    case "left":
+                        nuevaColumna = pacmanObj.columna - 1;
+                
+                        if (mapa[pacmanObj.fila][nuevaColumna].estado !== "pared") {
+                            if(mapa[pacmanObj.fila][nuevaColumna].estado=="ghost") {
+                                kills++;
+                                contadorKills.innerHTML=`${kills} kills`;
+                            }
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+            
+                            pacmanObj.columna = nuevaColumna;
+            
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+            
+                        }
+                    break;
+                    case "up":
+                        nuevaFila = pacmanObj.fila - 1;
+                
+                        if (mapa[nuevaFila][pacmanObj.columna].estado !== "pared") {
+                            if(mapa[nuevaFila][pacmanObj.columna].estado=="ghost") {
+                                kills++;
+                                contadorKills.innerHTML=`${kills} kills`;
+                            }
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+            
+                            pacmanObj.fila = nuevaFila;
+            
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+            
+                        }
+                    break;
+                    case "down":
+                        nuevaFila = pacmanObj.fila + 1;
+                
+                        if (mapa[nuevaFila][pacmanObj.columna].estado !== "pared") {
+                            if(mapa[nuevaFila][pacmanObj.columna].estado=="ghost") {
+                                kills++;
+                                contadorKills.innerHTML=`${kills} kills`;
+                            }
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "libre";
+            
+                            pacmanObj.fila = nuevaFila;
+            
+                            mapa[pacmanObj.fila][pacmanObj.columna].estado = "pacman";
+            
+                        }
+                    break;
+                }
+                renderMap();
+            } , difi);
         
             renderMap();
         });

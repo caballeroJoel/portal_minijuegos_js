@@ -228,50 +228,70 @@ body {
             }
         }
         
-    }
-    .mapa {
-        width: 50%;
-        height: 75%;
+        .mapa {
+            width: 50%;
+            height: 75%;
 
-        .mapa-log {
-            width: 100%;
-            height: 100%;
+            
+            .tit {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
 
-            margin: 0px;
-            padding: 0px;
-
-            border-collapse: collapse;
-            border-spacing: 0;
-
-            td {
-                width: 20px;
-                height: 20px;
+                color: var(--col-2);
+                
+                h2 {
+                    margin-bottom: 12px;
+                }
             }
-
-            .pared {
-                background-color: var(--col-2);
-            }
-            .pacman {
+    
+            .mapa-log {
                 width: 100%;
                 height: 100%;
-
-                display: flex;
-                justify-content: center;
-                align-items: center;    
+    
+                margin: 0px;
+                padding: 0px;
+    
+                border-collapse: collapse;
+                border-spacing: 0;
+    
+                td {
+                    width: 20px;
+                    height: 20px;
+                }
+    
+                .pared {
+                    background-color: var(--col-2);
+                }
+                .ghost {
+                    background-image: url(./../img/pacman/ghost.png);
+                    background-repeat: no-repeat;
+                    background-position: center top;
+                    background-size: 100% auto;
+                }
+                .pacman {
+                    width: 100%;
+                    height: 100%;
+    
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;    
+                }
+                .pacman-player {
+                    width: 75%;
+                    height: 75%;
+    
+                    border-radius: 50%;
+                    
+                    
+                    background: conic-gradient(
+                        yellow 0% 15%,
+                        transparent 15% 35%,
+                        yellow 35% 100%
+                    );
+                }
             }
-            .pacman-player {
-                width: 75%;
-                height: 75%;
-
-                border-radius: 50%;
-                
-                
-                background: conic-gradient(
-                    yellow 0% 15%,
-                    transparent 15% 35%,
-                    yellow 35% 100%
-                );
-            }
-        }
-    } 
+        } 
+    }
+    
 }
