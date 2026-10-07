@@ -365,4 +365,27 @@ body {
             }
         }
     }
+
+    .universo {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        border: 1px solid black;
+
+        .fila {
+            display: flex;
+            gap: 2px;
+            .celda {
+                width: 10px;
+                height: 10px;
+            }
+            .viva {
+                background-color: rgb(211, 205, 205);
+            }
+            .muerta {
+                background-color: rgb(53, 49, 49);
+            }
+        }
+    }
 }

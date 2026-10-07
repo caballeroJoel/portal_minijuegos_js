@@ -17,12 +17,12 @@ export function comprobarCreacion() {
     if(inputColumnas.value<10 || inputFilas.value<10) {
         pass=false;
     }
-    if(inputColumnas.value>100 || inputFilas.value>100) {
+    if(inputColumnas.value>50 || inputFilas.value>50) {
         pass=false;
     }
 
     if(!pass) {
-        displayError.textContent = "Los valores deben estar entre 10 y 100";
+        displayError.textContent = "Los valores deben estar entre 10 y 50";
         inputColumnas.classList.add("red");
         inputFilas.classList.add("red");
     }
@@ -32,12 +32,27 @@ export function comprobarCreacion() {
 }
 
 export function crearUniverso(col, fil) {
-    lifeGameWin.innerHTML="";
+    let html='';
+    html='<div class="universo">';
     console.log("Columnas: ", col);
     console.log("Filas: ", fil);
     
     for(let i=0; i<fil; i++) {
-        
+        html+='<div class="fila">';
+        for(let y=0; y<col; y++) {
+            html+=`<div class="celda muerta" data-id="${i}-${y}"></div>`;
+        }
+        html+='</div>';
     }
 
+    html+='</div>';
+    lifeGameWin.innerHTML=html;
+
 }
+
+export function aleatorio() {
+    
+    return Math.random() > 0.5 ? true : false;
+}
+
+console.log(aleatorio());
