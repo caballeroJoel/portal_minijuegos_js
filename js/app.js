@@ -1,3 +1,5 @@
+import {comprobarCreacion, crearUniverso} from "./functions.js";
+
 const game1B = document.querySelector("#game1");
 const game2B = document.querySelector("#game2");
 const game3B = document.querySelector("#game3");
@@ -392,5 +394,46 @@ function pacman() {
         
             renderMap();
         });
+
+}
+
+function lifesGame() {
+    
+    let html=`
+        <div id="lifeGameWin" class="life-game">
+            <div class="main-game">
+                <h1>Bienvenido al Juego de la Vida</h1>
+                <div class="selector-universo">
+                    <p>Crear tu universo:</p>   
+                    <div class="inputs">
+                        <div>
+                            <p>Numero de columnas:</p>
+                            <input type="number" id="inputColumnas" value="10">
+                        </div>
+                        
+                        <div>
+                            <p>Numero de filas:</p>
+                            <input type="number" id="inputFilas" value="10">
+                        </div>
+                    </div>
+                    <p style="color: red;" id="displayError"></p>
+                    <button class="crear-universo" id="btnCrearUniverso">Crear universo</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    gameWin.innerHTML = html;
+
+    // const lifeGameWin = document.querySelector("#lifeGameWin");
+    const btnCrearUniverso = document.querySelector("#btnCrearUniverso");
+
+    btnCrearUniverso
+        .addEventListener("click", function() {
+            if(comprobarCreacion()) {
+                crearUniverso(inputColumnas.value, inputFilas.value);
+            }
+        });
+        
 
 }
