@@ -1,4 +1,4 @@
-import {comprobarCreacion, crearUniverso} from "./functions.js";
+import {comprobarCreacion, crearUniverso, crearMatriz, contarVecinas, evolucionarCelula, anadirPatron} from "./functions.js";
 
 const game1B = document.querySelector("#game1");
 const game2B = document.querySelector("#game2");
@@ -44,7 +44,9 @@ window.addEventListener("click", function(e) {
     if(e.target.classList.contains("display_game")) {
         disGame.classList.add("hidden");
         gameWin.innerHTML = "";
-        this.clearInterval();
+        int.clearInterval();
+        intervalo.clearInterval();
+        interval.clearInterval();
     }
 })
 
@@ -425,13 +427,99 @@ function lifesGame() {
 
     gameWin.innerHTML = html;
 
+    const inputColumnas = document.querySelector("#inputColumnas");
+    const inputFilas = document.querySelector("#inputFilas");
+
     // const lifeGameWin = document.querySelector("#lifeGameWin");
     const btnCrearUniverso = document.querySelector("#btnCrearUniverso");
 
     btnCrearUniverso
         .addEventListener("click", function() {
             if(comprobarCreacion()) {
-                crearUniverso(inputColumnas.value, inputFilas.value);
+
+                const patrones = [
+                    {
+                        nombre: "Bloque",
+                        id: 1,
+                        altura: 2,
+                        ancho: 2
+                    },
+                    {
+                        nombre: "Intermitente",
+                        id: 2,
+                        altura: 3,
+                        ancho: 1
+                    },
+                    {
+                        nombre: "Bañera",
+                        id: 3,
+                        altura: 3,
+                        ancho: 3
+                    },
+                ];
+
+                let patr = "";
+
+                patrones.forEach(pat => {
+                    patr += `
+                        <option value="${pat.nombre}" data-id="${pat.id}">${pat.nombre}</option>
+                    `;
+                });
+
+                gameWin.innerHTML = `
+                    <div id="lifeGameWin" class="life-game">
+                        <div class="main-game">
+                            <div class="div-uni" id="divUni">
+                            </div>
+                            <div>
+                                <select id="selPatron">
+                                    ${patr}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                let uni = crearMatriz(inputColumnas.value, inputFilas.value);
+                let uniNew = crearMatriz(inputColumnas.value, inputFilas.value);
+
+                let interval = setInterval(function() {
+
+                    crearUniverso(uni);
+
+                    const patronSelect = document.querySelector("#selPatron");
+
+                    document.querySelectorAll(".celda").forEach((div, i) => {
+
+                        div.addEventListener("click", () => {
+                            const [fila, columna] = div.dataset.id.split("-").map(Number);
+
+                            const patron = patrones.find(
+                                p => p.nombre === patronSelect.value
+                            );
+
+                            if (patron) {
+                                uni = anadirPatron(uni, fila, columna, patron);
+
+                                crearUniverso(uni);
+                            }
+                        });
+
+                    });
+    
+                    for(let i=0; i<uniNew.length; i++) {
+                        for(let y=0; y<uniNew[i].length; y++) {
+                            let cel = contarVecinas(uniNew, i, y);
+    
+                            uniNew[i][y]=evolucionarCelula(uniNew, i, y, cel);
+    
+                        }
+                    }
+    
+                    uni = uniNew;
+                    
+                },500);
+
             }
         });
         

@@ -31,28 +31,120 @@ export function comprobarCreacion() {
 
 }
 
-export function crearUniverso(col, fil) {
+export function crearUniverso(universo) {
+
+    const divUni = document.querySelector("#divUni");
     let html='';
+
     html='<div class="universo">';
-    console.log("Columnas: ", col);
-    console.log("Filas: ", fil);
+
+    let fil = universo.length;
+    let col = universo[0].length;
     
     for(let i=0; i<fil; i++) {
-        html+='<div class="fila">';
+        html+=`<div class="fila" data-id="${i}">`;
         for(let y=0; y<col; y++) {
-            html+=`<div class="celda muerta" data-id="${i}-${y}"></div>`;
+            html+=`<div class="celda ${universo[i][y] ? 'viva' : 'muerta'}" data-id="${i}-${y}"></div>`;
         }
         html+='</div>';
     }
 
     html+='</div>';
-    lifeGameWin.innerHTML=html;
+    divUni.innerHTML=html;
 
 }
 
 export function aleatorio() {
-    
     return Math.random() > 0.5 ? true : false;
 }
 
-console.log(aleatorio());
+export function aleatorioPorcentage(por) {
+    return (Math.random()*100) < por ? true : false;
+}
+
+export function crearMatriz(col, fil) {
+
+    let mundo = [];
+
+    for(let i=0; i<fil; i++) {
+        mundo[i]=[];
+
+        for(let y=0; y<col; y++) {
+            mundo[i][y]=aleatorioPorcentage(10);
+        }
+    }
+
+    return mundo;
+
+}
+
+export function contarVecinas(uni, x, y) {
+    let celulaActual = uni[x][y];
+
+    let veciVivos = 0;
+
+    for(let k=-1; k<=1; k++) {
+        for(let j=-1; j<=1; j++) {
+            if(k!=0 || j!=0) {
+
+                let xk = x+k;
+                let yj = y+j;
+
+                if(xk >= 0 && xk < uni.length && yj >= 0 && yj < uni[xk].length) {
+                    if(uni[xk][yj]) {
+                        veciVivos++;
+                    }
+                }
+            }
+        }
+    }
+
+    return veciVivos;
+}
+
+export function evolucionarCelula(uni, x, y, cel) {
+    if(uni[x][y]) {
+        if(cel<2) {
+            return false;
+        } else if(cel==2 || cel==3) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if(cel==3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+export function anadirPatron(uni, fil, col, patron) {
+    console.log("Fila:", fil);
+    console.log("Columna:", col);
+    console.log("Patrón:", patron);
+
+    const filaInicio = fil - 1;
+    const colInicio = col - 1;
+
+    console.log("Fila final:", filaInicio + patron.altura);
+    console.log("Columna final:", colInicio + patron.ancho);
+
+    if (
+        filaInicio + patron.altura < uni.length &&
+        colInicio + patron.ancho < uni[0].length
+    ) {
+        
+        if(patron.nombre == "Bloque") {
+            for(let i = 0; i<2; i++) {
+                for(let y = 0; y<2; y++) {
+                    uni[fil+i][col+y]=true;
+                }
+            }
+        }
+        
+    }
+    return uni;
+    
+}
