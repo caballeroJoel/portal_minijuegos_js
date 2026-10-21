@@ -1,4 +1,4 @@
-import {comprobarCreacion, crearUniverso} from "./functions.js";
+import {comprobarCreacion, crearUniverso, crearMatriz, contarVecinas, evolucionarCelula, anadirPatron} from "./functions.js";
 
 const game1B = document.querySelector("#game1");
 const game2B = document.querySelector("#game2");
@@ -44,7 +44,9 @@ window.addEventListener("click", function(e) {
     if(e.target.classList.contains("display_game")) {
         disGame.classList.add("hidden");
         gameWin.innerHTML = "";
-        this.clearInterval();
+        int.clearInterval();
+        intervalo.clearInterval();
+        interval.clearInterval();
     }
 })
 
@@ -425,13 +427,311 @@ function lifesGame() {
 
     gameWin.innerHTML = html;
 
+    const inputColumnas = document.querySelector("#inputColumnas");
+    const inputFilas = document.querySelector("#inputFilas");
+
     // const lifeGameWin = document.querySelector("#lifeGameWin");
     const btnCrearUniverso = document.querySelector("#btnCrearUniverso");
 
     btnCrearUniverso
         .addEventListener("click", function() {
             if(comprobarCreacion()) {
-                crearUniverso(inputColumnas.value, inputFilas.value);
+
+                const patrones = [
+                    {
+                        nombre: "Bloque",
+                        id: 1,
+                        altura: 2,
+                        ancho: 2,
+                        figura: [
+                            [true, true],
+                            [true, true],
+                        ]
+                    },
+                    {
+                        nombre: "Intermitente",
+                        id: 2,
+                        altura: 3,
+                        ancho: 1,
+                        figura: [
+                            [true],
+                            [true],
+                            [true],
+                        ]
+                    },
+                    {
+                        nombre: "Bañera",
+                        id: 3,
+                        altura: 3,
+                        ancho: 3,
+                        figura: [
+                            [false, true, false],
+                            [true, false, true],
+                            [false, true, false]
+                        ]
+                    },
+                    {
+                        nombre: "Planeador",
+                        id: 4,
+                        altura: 3,
+                        ancho: 3,
+                        figura: [
+                            [false, true, false],
+                            [false, false, true],
+                            [true, true, true]
+                        ]
+                    },
+                    {
+                        nombre: "Sapo",
+                        id: 5,
+                        altura: 2,
+                        ancho: 4,
+                        figura: [
+                            [false, true, true, true],
+                            [true, true, true, false]
+                        ]
+                    },
+                    {
+                        nombre: "Faro",
+                        id: 6,
+                        altura: 4,
+                        ancho: 4,
+                        figura: [
+                            [true, true, false, false],
+                            [true, true, false, false],
+                            [false, false, true, true],
+                            [false, false, true, true]
+                        ]
+                    },
+                    {
+                        nombre: "Pentadecathlon",
+                        id: 7,
+                        altura: 10,
+                        ancho: 3,
+                        figura: [
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                            [false, true, false],
+                        ]
+                    },
+                    {
+                        nombre: "Nave ligera",
+                        id: 8,
+                        altura: 4,
+                        ancho: 5,
+                        figura: [
+                            [false, true, true, false, false],
+                            [true, false, false, true, false],
+                            [true, false, false, false, true],
+                            [true, true, true, true, true]
+                        ]
+                    },
+                    {
+                        nombre: "Colmena",
+                        id: 9,
+                        altura: 3,
+                        ancho: 4,
+                        figura: [
+                            [false, true, true, false],
+                            [true, false, false, true],
+                            [false, true, true, false]
+                        ]
+                    },
+                    {
+                        nombre: "Barco",
+                        id: 10,
+                        altura: 3,
+                        ancho: 3,
+                        figura: [
+                            [true, true, false],
+                            [true, false, true],
+                            [false, true, false]
+                        ]
+                    },
+                    {
+                        nombre: "Pulsar",
+                        id: 11,
+                        altura: 13,
+                        ancho: 13,
+                        figura: [
+                            [false, false, true, true, true, false, false, false, true, true, true, false, false],
+                            [false, false, false, false, false, false, false, false, false, false, false, false, false],
+                            [true, false, false, false, false, true, false, true, false, false, false, false, true],
+                            [true, false, false, false, false, true, false, true, false, false, false, false, true],
+                            [true, false, false, false, false, true, false, true, false, false, false, false, true],
+                            [false, false, true, true, true, false, false, false, true, true, true, false, false],
+                            [false, false, false, false, false, false, false, false, false, false, false, false, false],
+                            [false, false, true, true, true, false, false, false, true, true, true, false, false],
+                            [true, false, false, false, false, true, false, true, false, false, false, false, true],
+                            [true, false, false, false, false, true, false, true, false, false, false, false, true],
+                            [true, false, false, false, false, true, false, true, false, false, false, false, true],
+                            [false, false, false, false, false, false, false, false, false, false, false, false, false],
+                            [false, false, true, true, true, false, false, false, true, true, true, false, false]
+                        ]
+                    },
+                    {
+                        nombre: "Parpadeador",
+                        id: 12,
+                        altura: 1,
+                        ancho: 3,
+                        figura: [
+                            [true, true, true]
+                        ]
+                    },
+                    {
+                        nombre: "Rana",
+                        id: 13,
+                        altura: 3,
+                        ancho: 4,
+                        figura: [
+                            [false, false, false, false],
+                            [true, true, true, false],
+                            [false, true, true, true]
+                        ]
+                    },
+                    {
+                        nombre: "Cruz",
+                        id: 14,
+                        altura: 3,
+                        ancho: 3,
+                        figura: [
+                            [false, true, false],
+                            [true, true, true],
+                            [false, true, false]
+                        ]
+                    },
+                    {
+                        nombre: "Tub",
+                        id: 15,
+                        altura: 3,
+                        ancho: 3,
+                        figura: [
+                            [false, true, false],
+                            [true, false, true],
+                            [false, true, false]
+                        ]
+                    },
+                    {
+                        nombre: "Eater",
+                        id: 16,
+                        altura: 4,
+                        ancho: 4,
+                        figura: [
+                            [true, true, false, false],
+                            [true, false, false, false],
+                            [false, true, false, true],
+                            [false, false, true, true]
+                        ]
+                    }
+                ];
+
+                let patr = "";
+
+                patrones.forEach(pat => {
+                    patr += `
+                        <option value="${pat.nombre}" data-id="${pat.id}">${pat.nombre}</option>
+                    `;
+                });
+
+                gameWin.innerHTML = `
+                    <div id="lifeGameWin" class="life-game">
+                        <div class="main-game">
+                            <div class="div-uni" id="divUni">
+                            </div>
+                            <div>
+                                <select id="selPatron">
+                                    ${patr}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="inputVelocidad">
+                                    Velocidad: <span id="displayVelocidad">500 ms</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input
+                                    type="range"
+                                    id="inputVelocidad"
+                                    min="50"
+                                    max="1000"
+                                    step="50"
+                                    value="500"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                let uni = crearMatriz(inputColumnas.value, inputFilas.value);
+
+                const inputVelocidad = document.querySelector("#inputVelocidad");
+                const displayVelocidad = document.querySelector("#displayVelocidad");
+                
+                let interval;
+
+                function iniciarJuego (velo) {
+                    
+                    clearInterval(interval);
+
+                    interval = setInterval(function() {
+                        
+                        crearUniverso(uni);
+    
+                        let uniNew = crearMatriz(uni[0].length, uni.length);
+    
+                        const patronSelect = document.querySelector("#selPatron");
+    
+                        document.querySelectorAll(".celda").forEach((div, i) => {
+    
+                            div.addEventListener("click", () => {
+                                const [fila, columna] = div.dataset.id.split("-").map(Number);
+    
+                                const patron = patrones.find(
+                                    p => p.nombre === patronSelect.value
+                                );
+    
+                                if (patron) {
+                                    uni = anadirPatron(uni, fila, columna, patron);
+    
+                                    crearUniverso(uni);
+                                }
+                            });
+    
+                        });
+        
+                        for(let i=0; i<uni.length; i++) {
+                            for(let y=0; y<uni[i].length; y++) {
+                                let cel = contarVecinas(uni, i, y);
+        
+                                uniNew[i][y]=evolucionarCelula(uni, i, y, cel);
+        
+                            }
+                        }
+        
+                        uni = uniNew;
+                        
+                    },velo);
+
+                }
+
+                iniciarJuego(Number(inputVelocidad.value));
+
+                inputVelocidad.addEventListener("input", function() {
+
+                    const velocidad = Number(inputVelocidad.value);
+
+                    displayVelocidad.textContent = velocidad + " ms";
+
+                    iniciarJuego(velocidad);
+
+                });
             }
         });
         

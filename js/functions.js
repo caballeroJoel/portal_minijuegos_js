@@ -17,12 +17,12 @@ export function comprobarCreacion() {
     if(inputColumnas.value<10 || inputFilas.value<10) {
         pass=false;
     }
-    if(inputColumnas.value>100 || inputFilas.value>100) {
+    if(inputColumnas.value>50 || inputFilas.value>50) {
         pass=false;
     }
 
     if(!pass) {
-        displayError.textContent = "Los valores deben estar entre 10 y 100";
+        displayError.textContent = "Los valores deben estar entre 10 y 50";
         inputColumnas.classList.add("red");
         inputFilas.classList.add("red");
     }
@@ -31,13 +31,122 @@ export function comprobarCreacion() {
 
 }
 
-export function crearUniverso(col, fil) {
-    lifeGameWin.innerHTML="";
-    console.log("Columnas: ", col);
-    console.log("Filas: ", fil);
+export function crearUniverso(universo) {
+
+    const divUni = document.querySelector("#divUni");
+    let html='';
+
+    html='<div class="universo">';
+
+    let fil = universo.length;
+    let col = universo[0].length;
     
     for(let i=0; i<fil; i++) {
-        
+        html+=`<div class="fila" data-id="${i}">`;
+        for(let y=0; y<col; y++) {
+            html+=`<div class="celda ${universo[i][y] ? 'viva' : 'muerta'}" data-id="${i}-${y}"></div>`;
+        }
+        html+='</div>';
     }
 
+    html+='</div>';
+    divUni.innerHTML=html;
+
+}
+
+export function aleatorio() {
+    return Math.random() > 0.5 ? true : false;
+}
+
+export function aleatorioPorcentage(por) {
+    return (Math.random()*100) < por ? true : false;
+}
+
+export function crearMatriz(col, fil) {
+
+    let mundo = [];
+
+    for(let i=0; i<fil; i++) {
+        mundo[i]=[];
+
+        for(let y=0; y<col; y++) {
+            mundo[i][y]=aleatorio();
+        }
+    }
+
+    return mundo;
+
+}
+
+export function contarVecinas(uni, x, y) {
+    let celulaActual = uni[x][y];
+
+    let veciVivos = 0;
+
+    for(let k=-1; k<=1; k++) {
+        for(let j=-1; j<=1; j++) {
+            if(k!=0 || j!=0) {
+
+                let xk = x+k;
+                let yj = y+j;
+
+                if(xk >= 0 && xk < uni.length && yj >= 0 && yj < uni[xk].length) {
+                    if(uni[xk][yj]) {
+                        veciVivos++;
+                    }
+                }
+            }
+        }
+    }
+
+    return veciVivos;
+}
+
+export function evolucionarCelula(uni, x, y, cel) {
+    if(uni[x][y]) {
+        if(cel<2) {
+            return false;
+        } else if(cel==2 || cel==3) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if(cel==3) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+export function anadirPatron(uni, fil, col, patron) {
+    console.log("Fila:", fil);
+    console.log("Columna:", col);
+    console.log("Patrón:", patron);
+    console.log("Patrón ancho:", patron.ancho);
+    console.log("Patrón alto:", patron.altura);
+
+    const filaInicio = fil - 1;
+    const colInicio = col - 1;
+
+    console.log("Fila final:", filaInicio + patron.altura);
+    console.log("Columna final:", colInicio + patron.ancho);
+
+    if (
+        filaInicio + patron.altura < uni.length &&
+        colInicio + patron.ancho < uni[0].length
+    ) {
+        console.log("Dentro");
+
+        for(let i = 0; i<patron.altura; i++) {
+            for(let y = 0; y<patron.ancho; y++) {
+                uni[fil+i][col+y]=patron.figura[i][y];
+            }
+        }
+    
+    }
+
+    return uni;
+    
 }
