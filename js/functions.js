@@ -70,7 +70,7 @@ export function crearMatriz(col, fil) {
         mundo[i]=[];
 
         for(let y=0; y<col; y++) {
-            mundo[i][y]=aleatorioPorcentage(10);
+            mundo[i][y]=aleatorio();
         }
     }
 
@@ -124,6 +124,8 @@ export function anadirPatron(uni, fil, col, patron) {
     console.log("Fila:", fil);
     console.log("Columna:", col);
     console.log("Patrón:", patron);
+    console.log("Patrón ancho:", patron.ancho);
+    console.log("Patrón alto:", patron.altura);
 
     const filaInicio = fil - 1;
     const colInicio = col - 1;
@@ -135,16 +137,16 @@ export function anadirPatron(uni, fil, col, patron) {
         filaInicio + patron.altura < uni.length &&
         colInicio + patron.ancho < uni[0].length
     ) {
-        
-        if(patron.nombre == "Bloque") {
-            for(let i = 0; i<2; i++) {
-                for(let y = 0; y<2; y++) {
-                    uni[fil+i][col+y]=true;
-                }
+        console.log("Dentro");
+
+        for(let i = 0; i<patron.altura; i++) {
+            for(let y = 0; y<patron.ancho; y++) {
+                uni[fil+i][col+y]=patron.figura[i][y];
             }
         }
-        
+    
     }
+
     return uni;
     
 }
